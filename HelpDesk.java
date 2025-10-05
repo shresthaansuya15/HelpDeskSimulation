@@ -9,9 +9,9 @@ public class HelpDesk
     public HelpDesk()
     {
         // an array to hold 4 queues
-        courseLevelQueue = new ArrayBoundedQueue[4];
+        courseLevelQueues = new ArrayBoundedQueue[4];
 
-        for (int queueIndex = 0; queueIndex < queues.length; queueIndex++) 
+        for (int queueIndex = 0; queueIndex < courseLevelQueues.length; queueIndex++) 
         {
             // Each course level can hold up to 3 students
             courseLevelQueues[queueIndex] = new ArrayBoundedQueue<>(3);
@@ -21,8 +21,6 @@ public class HelpDesk
             remainingWorkTime = 0;
             helpDeskLog = "";
             simulationTime = 0;
-            totalStudentsServed = 0;
-            totalWaitTime = 0;
 
             /*
             1. queues[0] -> queue for 100-level courses
@@ -38,7 +36,7 @@ public class HelpDesk
     // ---------------------------------------------
     public void addStudent(String studentName, int course, int workload)
     {
-        Student pio = new Student(studentName, course, workload, time);
+        Student pio = new Student(studentName, course, workload, simulationTime);
 
         int initialQueueIndex = (pio.getCourseLevel() / 100) - 1;
         boolean student_added = false;
@@ -110,5 +108,35 @@ public class HelpDesk
         simulationTime++;
     }
 
+    // ---------------------------------------------
+    // Return current simulation time
+    // ---------------------------------------------
+    public int getTime()
+    {
+        return simulationTime;
+    }
     
+    // ---------------------------------------------
+    // Return current status as string
+    // ---------------------------------------------
+    public String toString()
+    {
+        if (currentStudent != null)
+        {
+            return "Time " + (simulationTime - 1) + ", Helping " + currentStudent.getName()
+                    + " from CSC" + currentStudent.getCourse();
+        }
+        else
+        {
+            return "Time " + (simulationTime - 1) + ", IDLE";
+        }
+    }
+
+    // ---------------------------------------------
+    // Return full HelpDesk log
+    // ---------------------------------------------
+    public String getLog()
+    {
+        return helpDeskLog;
+    }
 }
