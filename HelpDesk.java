@@ -5,8 +5,6 @@ public class HelpDesk
     private int remainingWorkTime;
     private String helpDeskLog;
     private int simulationTime;
-    private int totalStudentsServed;
-    private int totalWaitTime;
 
     public HelpDesk()
     {
