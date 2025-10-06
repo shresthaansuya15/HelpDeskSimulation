@@ -5,12 +5,17 @@ public class Student
     private int workload;
     private int arrivalTime;
 
-    public Student(String name, int course, int workload, int arrivalTime) 
+    public Student(int arrivalTime, String name, int course, int workload) 
     {
+        this.arrivalTime = arrivalTime;
         this.name = name;
         this.course = course;
         this.workload = workload;
-        this.arrivalTime = arrivalTime;
+    }
+
+    public int getArrivalTime() 
+    {
+        return arrivalTime;
     }
 
     public String getName() 
@@ -26,11 +31,6 @@ public class Student
     public int getWorkload() 
     {
         return workload;
-    }
-
-    public int getArrivalTime() 
-    {
-        return arrivalTime;
     }
 
     public int getCourseLevel()

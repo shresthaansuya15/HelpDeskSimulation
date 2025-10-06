@@ -36,9 +36,41 @@ public class HelpDesk
     // ---------------------------------------------
     public void addStudent(String studentName, int course, int workload)
     {
-        Student pio = new Student(studentName, course, workload, simulationTime);
+        Student pio = new Student(simulationTime, studentName, course, workload);
+
+        boolean helpDeskIDLE = (currentStudent == null);
+        boolean anyQueueNonEmpty = false;
+
+        for (int queueIndex = 0; queueIndex < 4; queueIndex++)
+        {
+            if (!courseLevelQueues[queueIndex].isEmpty())
+            {
+                anyQueueNonEmpty = true;
+                break;
+            }
+        }
+
+        if (helpDeskIDLE && !anyQueueNonEmpty)
+        {
+            currentStudent = pio;
+            remainingWorkTime = pio.getWorkload();
+            helpDeskLog += "Time " + simulationTime + ", Started helping " + pio.getName()
+                           + " from CSC" + pio.getCourse() + "\n";
+
+            return;
+        }
 
         int initialQueueIndex = (pio.getCourseLevel() / 100) - 1;
+
+        if (initialQueueIndex < 0)
+        {
+            initialQueueIndex = 0;
+        }
+        if (initialQueueIndex > 3)
+        {
+            initialQueueIndex = 3;
+        }
+
         boolean student_added = false;
 
         // Enqueue student in their course level or escalate to higher levels if full
@@ -71,6 +103,9 @@ public class HelpDesk
     // ---------------------------------------------
     public void step()
     {
+        // Advancing the simulation clock
+        simulationTime++;
+        
         if (currentStudent != null)
         {
             remainingWorkTime--;        // reducing workload of current student being helped by 1 minute
@@ -86,7 +121,7 @@ public class HelpDesk
             }
         }
 
-        // if no student is being helped, picking next student from highest-priority non-empty queue
+         // if no student is being helped, picking next student from highest-priority non-empty queue
         if (currentStudent == null)
         {
             for (int queueIndex = 0; queueIndex < 4; queueIndex++)
@@ -103,9 +138,6 @@ public class HelpDesk
                 }
             }
         }
-
-        // Advancing the simulation clock
-        simulationTime++;
     }
 
     // ---------------------------------------------
@@ -123,12 +155,12 @@ public class HelpDesk
     {
         if (currentStudent != null)
         {
-            return "Time " + (simulationTime - 1) + ", Helping " + currentStudent.getName()
+            return "Time " + simulationTime + ", Helping " + currentStudent.getName()
                     + " from CSC" + currentStudent.getCourse();
         }
         else
         {
-            return "Time " + (simulationTime - 1) + ", IDLE";
+            return "Time " + simulationTime + ", IDLE";
         }
     }
 

@@ -1,15 +1,18 @@
 public class ArrayBoundedQueue<T> implements QueueInterface<T>
 {
     private T[] elements;
-    private int numElements = 0;
-    private int front = 0;
-    private int rear = 0;
+    private int numElements;
+    private int front;
+    private int rear;
     private int max_capacity;
 
-    public ArrayBoundedQueue(int max_capacity)
+    public ArrayBoundedQueue(int capacity)
     {
-        this.max_capacity = max_capacity;
+        max_capacity = capacity;
         elements = (T[]) new Object[max_capacity];
+        front = 0;
+        rear = 0;
+        numElements = 0;
     }
 
     public void enqueue(T item)
@@ -20,16 +23,8 @@ public class ArrayBoundedQueue<T> implements QueueInterface<T>
             return;
         }
 
-        if (rear == max_capacity - 1)
-        {
-            rear = 0;
-            elements[rear] = item;
-            numElements++;
-            return;
-        }
-
-        rear++;
         elements[rear] = item;
+        rear = (rear + 1) % max_capacity;
         numElements++;
     }
 
@@ -42,15 +37,8 @@ public class ArrayBoundedQueue<T> implements QueueInterface<T>
         }
 
         T temp = elements[front];
+        front = (front + 1) % max_capacity;
         numElements--;
-
-        if (front == max_capacity - 1)
-        {
-            front = 0;
-            return temp;
-        }
-
-        front++;
         return temp;
     }
 
